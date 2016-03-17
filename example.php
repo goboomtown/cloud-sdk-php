@@ -7,6 +7,7 @@ use Swagger\Client\Api\ProvidersApi;
 use Swagger\Client\Api\MerchantsApi;
 use Swagger\Client\Api\IssuesApi;
 use Swagger\Client\Model\Issue;
+use Swagger\Client\ApiException;
 
 # Initialize the ApiClient
 $apiClient = new ApiClient();
@@ -39,7 +40,7 @@ try {
     $memberCollection = $providerApi->getProviderMembers();
     print_r($memberCollection->getResults()); echo "\n\n";
 
-} catch (\Swagger\Client\ApiException $e) {
+} catch (ApiException $e) {
     print_r($e->getResponseObject());
 }
 
@@ -83,6 +84,6 @@ try {
     # Finally lets cancel the Issue
     $issue = $issuesApi->cancelIssue($issue->getId());
 
-} catch (\Swagger\Client\ApiException $e) {
+} catch (ApiException $e) {
     print_r($e->getResponseObject());
 }
