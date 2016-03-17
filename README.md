@@ -90,10 +90,10 @@ try {
     $issuesApi->createIssueLog($issue->getId(), "Hi, this is a note");
     
     # Lets advance the Issues status to "Resolved"
-    $issue = $issuesApi->resolveIssue($issue->getId());
+    $issuesApi->resolveIssue($issue->getId());
     
     # Finally lets cancel the Issue
-    $issue = $issuesApi->cancelIssue($issue->getId());
+    $issuesApi->cancelIssue($issue->getId());
 
 } catch (\Swagger\Client\ApiException $e) {
     print_r($e->getResponseObject());
