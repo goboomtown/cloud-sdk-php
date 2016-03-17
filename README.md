@@ -13,7 +13,7 @@ composer require goboomtown/cloud-sdk-php
 
 ## Usage
 
-> **Note:** This version of the Boomtown Cloud SDK for PHP requires PHP 5.4 or greater.
+> **Note:** This version of the Boomtown Cloud SDK for PHP requires PHP 5.3 or greater.
 
 #### Getting started, accessing basic data.
 

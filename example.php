@@ -21,7 +21,7 @@ $providerApi = new ProvidersApi($apiClient);
 try {
     # Request your Provider profile
     # Note: Results are always an array of 0 or more models
-    # If you just want to get ritght at the data call the getResults method.
+    # If you just want to get right at the data call the getResults method.
     $provider = $providerApi->getProvider()->getResults()[0];
 
     # Request your default team
