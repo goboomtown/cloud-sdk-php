@@ -1,15 +1,22 @@
 # Boomtown Cloud SDK for PHP (v1)
 
-This repository contains the open source PHP SDK that allows you to access the Boomtown Cloud API from your PHP app.
+## Overview
+This repository contains the open source PHP SDK that allows you to access the Cloud API from your PHP app.
+Authentication uses a pre-shared key and secret, which is generated in our Admin Portal.
 
+## Getting Started
+To get started clone this repository and add it to your PHP project
 
-## Installation
-
-The Boomtown Cloud  PHP SDK can be installed with [Composer](https://getcomposer.org/). Run this command:
-
-```sh
-composer require goboomtown/cloud-sdk-php
-```
+## API Key Generation
+To generate an API access token and private-key:
+ - Log onto the Admin Portal (https://admin.goboomtown.com)
+ - Click Providers in the left menu
+ - Find your provider in the list
+ - Double click your provider
+ - Click API Settings, near the button of the configuration panel
+ - Select Sandbox or Live, depending on the state of development
+ - Click Re-Generate
+ - Copy the access token and private-key, as provided in the pop-up dialog
 
 ## Usage
 
