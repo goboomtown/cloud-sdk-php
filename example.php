@@ -8,81 +8,81 @@ use Swagger\Client\Api\MerchantsApi;
 use Swagger\Client\Api\IssuesApi;
 use Swagger\Client\Model\Issue;
 
-# Create a configuration object and add your Provider public/private keys
-# https://boom-1-api.dev.gizmocreative.com/api/v2
-# Public Key: E88BD2D2B44F749ED372
-# Private Key: 98de93cbcf35d578adcce3e9c9f68562b3327006
+# Initialize the ApiClient
+$apiClient = new ApiClient();
 
-# Apply the configuration to the API client
-$apiClient = new ApiClient($config);
-$apiClient->setApiToken("E88BD2D2B44F749ED372")->setApiSecret("https://boom-1-api.dev.gizmocreative.com/api/v2");
+# Set your API credentials
+$apiClient
+    ->setApiToken("YOUR_BOOMTOWN_TOKEN")
+    ->setApiSecret("YOUR_BOOMTOWN_SECRET");
 
-# Instantiate the ProvidersApi client
+# Instantiate the ProvidersApi
+# **Note:** we need to provide the API ApiClient we configured above.
+$providerApi = new ProvidersApi($apiClient);
 try {
-    $providerApi = new ProvidersApi($apiClient);
-
-    # Request your Provider model
-    # Results are always an array of 0 or more models
+    # Request your Provider profile
+    # Note: Results are always an array of 0 or more models
+    # If you just want to get ritght at the data call the getResults method.
     $provider = $providerApi->getProvider()->getResults()[0];
 
     # Request your default team
-    $defaultTeam = $providerApi->getProviderTeam($provider->getDefaultPartnersTeamsId())->getResults()[0];
+    $defaultTeam = $providerApi->getProviderTeam(
+        $provider->getDefaultPartnersTeamsId())->getResults()[0];
 
     # Get the raw response for the provider teams request
-    $teams = $providerApi->getProviderTeams();
-
-    # Print the raw ProviderTeamResponse
-    print_r($teams); echo "\n\n";
+    $teamCollection = $providerApi->getProviderTeams();
 
     # Print only the array of ProviderTeam models
     print_r($teams->getResults()); echo "\n\n";
 
-
-    $members_collection = $providerApi->getProviderMembers();
+    # Get all of the your Merchants
+    $memberCollection = $providerApi->getProviderMembers();
+    print_r($memberCollection->getResults()); echo "\n\n";
 
 } catch (\Swagger\Client\ApiException $e) {
     print_r($e->getResponseObject());
 }
 
 
-//$teams = $providerApi->getProviderTeams();
-//print_r($teams);
-//echo "\n\n";
-//
-//// Get all of the members associated with the provider
-//$member_collection = $providerApi->getProviderMembers();
-//print_r($member_collection);
-//echo "\n\n";
-
-$merchantsApi = new MerchantsApi($apiClient);
-try {
-    // Get a single member using their ID
-    $member_id = "WA3QMJ";
-    $member = $merchantsApi->getMember($member_id)->getResults();
-    print_r($member);
-    echo "\n\n";
-} catch (\Swagger\Client\ApiException $e) {
-    print_r($e->getResponseObject());
-}
-
+// Instantiate the IssuesApi
+# **Note:** we can reuse the ApiClient object created previously/above.
 $issuesApi = new IssuesApi($apiClient);
-$issuesApi->getIssues();
-//try {
-//    $issuesApi = new IssuesApi($apiClient);
-//    $issue = new Issue();
-//    $issue->setDetails("This is a test");
-//    $issue = $issuesApi->createIssue($issue);
-//    print_r($issue);
-//    echo "\n\n";
-//} catch (\Swagger\Client\ApiException $e) {
-//    print_r($e->getResponseObject());
-//}
+try {
+    $limit = 10;
+    $start = 0;
+    # Get a collection of all of the Issues you are managing
+    $globalIssueCollection = $issuesApi
+        ->getIssues($limit, $start)
+        ->getResults();
 
+    # Get a collection of Issues for a Merchant
+    $merchantIssueCollection = $issuesApi
+        ->getIssues($limit, $start, $merchantId)
+        ->getResults();
 
-//echo "\n\n";
-//
-//// Get a single issue using it's ID
-//$issue_id = "WA3QMJ-FYH-2PAJHV";
-//$issue = $issuesApi->getIssue($issue_id);
-//print_r($issue->getResults());
-//echo "\n\n";
+    # Get a collection of all of the Issues for a Merchants User
+    $userIssueCollection = $issuesApi
+        ->getIssues($limit, $start, null, $merchantUserId)
+        ->getResults();
+
+    # Get a collection of all of the Issues for a Merchants Location
+    # Result pagination defaults to a limit of 10 and starts from 0
+    $locationIssueCollection = $issuesApi
+        ->getIssues(null, null, null, null, $merchantLocationId)
+        ->getResults();
+
+    # Lets grab the first issue and do a few things with it
+    $issue = $globalIssueCollection[0];
+
+    # Lets log a note against this Issue
+    $issuesApi->createIssueLog($issue->getId(), "Hi, this is a note");
+
+    # Lets advance the Issues status to "Resolved"
+    $issue = $issuesApi->resolveIssue($issue->getId());
+
+    # Finally lets cancel the Issue
+    $issue = $issuesApi->cancelIssue($issue->getId());
+
+} catch (\Swagger\Client\ApiException $e) {
+    print_r($e->getResponseObject());
+}

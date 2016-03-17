@@ -18,7 +18,7 @@ composer require goboomtown/cloud-sdk-php
 #### Getting started, accessing basic data.
 
 ```php
-# Intitialize the ApiClient
+# Initialize the ApiClient
 $apiClient = new ApiClient();
 
 # Set your API credentials
