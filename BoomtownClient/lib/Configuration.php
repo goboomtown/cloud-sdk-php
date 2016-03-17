@@ -96,7 +96,7 @@ class Configuration
      *
      * @var string
      */
-    protected $host = 'https://boom-1-api.dev.gizmocreative.com/api/v2';
+    protected $host = 'https://api.goboomtown.com/api/v2';
 
     /**
      * Timeout (second) of the HTTP request, by default set to 0, no timeout
