@@ -2,11 +2,9 @@
 require_once('BoomtownClient/autoload.php');
 
 use Swagger\Client\ApiClient;
-use Swagger\Client\Configuration;
 use Swagger\Client\Api\ProvidersApi;
 use Swagger\Client\Api\MerchantsApi;
 use Swagger\Client\Api\IssuesApi;
-use Swagger\Client\Model\Issue;
 use Swagger\Client\ApiException;
 
 # Initialize the ApiClient
@@ -45,7 +43,8 @@ try {
 }
 
 
-// Instantiate the IssuesApi
+#### Working with issues
+# Instantiate the IssuesApi
 # **Note:** we can reuse the ApiClient object created previously/above.
 $issuesApi = new IssuesApi($apiClient);
 try {
@@ -83,6 +82,72 @@ try {
 
     # Finally lets cancel the Issue
     $issuesApi->cancelIssue($issue->getId());
+
+} catch (ApiException $e) {
+    print_r($e->getResponseObject());
+}
+
+
+
+#### Creating a new Merchant and creating a new Issue for them
+use Swagger\Client\Model\Issue;
+use Swagger\Client\Model\Member;
+use Swagger\Client\Model\MemberUser;
+use Swagger\Client\Model\MemberLocation;
+use Swagger\Client\Model\MemberCreateRequest;
+$merchantApi = new MerchantsApi($apiClient);
+$providerApi = new ProvidersApi($apiClient);
+$issuesApi   = new IssuesApi($apiClient);
+try {
+
+    # First Lets create a new Merchant,
+    # we will simultaneously create a user and a location
+    $memberCreate = new MemberCreateRequest();
+
+    # Instantiate the models
+    $memberCreate
+        ->setMembers(new Member())
+        ->setMembersUsers(new MemberUser())
+        ->setMembersLocations(new MemberLocation());
+
+    # Create the member
+    $memberCreate->getMembers()
+        ->setName("A Merchant")
+        ->setCity("San Francisco")
+        ->setState("CA")
+        ->setZipcode("94101")
+        ->setEmail("info@amerchant.com")
+        ->setPhone("555 555 5555")
+        ->setStreet1("123 Skylane");
+
+    # Create the User
+    $memberCreate->getMembersUsers()
+        ->setFirstName("Bob")
+        ->setLastName("Mango")
+        ->setSmsNumber("999 999 9999")
+        ->setEmail("bmango@amerchant.com");
+
+    # Create the Location
+    $memberCreate->getMembersLocations()
+        ->setSiteName("A Merchant Mango")
+        ->setCity("an Francisco")
+        ->setState("CA")
+        ->setZipcode("94101")
+        ->setStreet1("Soma Lofts")
+        ->setStreet2("#1337");
+
+    # Ok, lets save everything
+    $memberData = $merchantApi->createMember($memberCreate)->getResults();
+
+    # Use the new Merchant data to create a Issue
+    $issue = new Issue();
+    $issue->setMembersId($memberData->getMember()->getId())
+        ->setMembersLocationsId($memberData->getMemberLocation()->getId())
+        ->setMembersUsersId($memberData->getMemberUser()->getId())
+        ->setDetails("We would like to get WiFi installed here.")
+        ->setType("Support");
+
+    $issue = $issuesApi->createIssue($issue);
 
 } catch (ApiException $e) {
     print_r($e->getResponseObject());

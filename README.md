@@ -49,14 +49,14 @@ try {
     $memberCollection = $providerApi->getProviderMembers();
     print_r($memberCollection->getResults()); echo "\n\n";
 
-} catch (\Swagger\Client\ApiException $e) {
+} catch (ApiException $e) {
     print_r($e->getResponseObject());
 }
 ```
 
 #### Working with issues
 ```php
-// Instantiate the IssuesApi
+# Instantiate the IssuesApi
 # **Note:** we can reuse the ApiClient object created previously/above.
 $issuesApi = new IssuesApi($apiClient);
 try {
@@ -95,11 +95,66 @@ try {
     # Finally lets cancel the Issue
     $issuesApi->cancelIssue($issue->getId());
 
-} catch (\Swagger\Client\ApiException $e) {
+} catch (ApiException $e) {
     print_r($e->getResponseObject());
 }
+```
 
+#### Creating a new Merchant and creating a new Issue for them
+```php
+$merchantApi = new MerchantsApi($apiClient);
+$issuesApi   = new IssuesApi($apiClient);
+try {
 
+    # First Lets create a new Merchant, 
+    # we will simultaneously create a user and a location
+    $merchantCreate = new MemberCreateRequest();
+
+    # Instantiate the models
+    $memberCreate
+        ->setMembers(new Member())
+        ->setMembersUsers(new MemberUser())
+        ->setMembersLocations(new MemberLocation());
+
+    $merchantCreate->getMembers()
+        ->setName("A Merchant")
+        ->setCity("San Francisco")
+        ->setState("CA")
+        ->setZipcode("94101")
+        ->setEmail("info@amerchant.com")
+        ->setPhone("555 555 5555")
+        ->setStreet1("123 Skylane");
+
+    $merchantCreate->getMembersUsers()
+        ->setFirstName("Bob")
+        ->setLastName("Mango")
+        ->setSmsNumber("999 999 9999")
+        ->setEmail("bmango@amerchant.com");
+
+    $merchantCreate->getMembersLocations()
+        ->setSiteName("A Merchant Mango")
+        ->setCity("an Francisco")
+        ->setState("CA")
+        ->setZipcode("94101")
+        ->setStreet1("Soma Lofts")
+        ->setStreet2("#1337");
+
+    # Ok, lets save it
+    $merchantData = $merchantApi->createMember($merchantCreate)->getResults();
+
+    # Use the new Merchant data to create a Issue
+    $issue = new Issue();
+    $issue->setMembersId($merchantData->getMember()->getId())
+        ->setMembersLocationsId($merchantData->getMemberLocation()->getId())
+        ->setMembersUsersId($merchantData->getMemberUser()->getId())
+        ->setDetails("We would like to get WiFi installed here.")
+        ->setType("Support");
+
+    $issue = $issuesApi->createIssue($issue);
+
+} catch (ApiException $e) {
+    print_r($e->getResponseObject());
+}
 ```
 
 Cloud API documentation available at: [http://developers.goboomtown.com/](http://developers.goboomtown.com/)
