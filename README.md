@@ -5,10 +5,9 @@ This repository contains the open source PHP SDK that allows you to access the C
 Authentication uses a pre-shared key and secret, which is generated in our Admin Portal.
 
 ## Getting Started
-To get started clone this repository and add it to your PHP project
+To get started, clone this repository and add it to your PHP project
 
 ## API Key Generation
-To generate an API access token and private-key:
  - Log onto the Admin Portal (https://admin.goboomtown.com)
  - Click Providers in the left menu
  - Find your provider in the list
