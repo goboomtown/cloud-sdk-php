@@ -54,7 +54,7 @@ try {
 }
 ```
 
-#### Working with issues
+#### Working with Merchant Issues
 ```php
 # Instantiate the IssuesApi
 # **Note:** we can reuse the ApiClient object created previously/above.

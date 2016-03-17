@@ -43,7 +43,7 @@ try {
 }
 
 
-#### Working with issues
+#### Working with Merchant Issues
 # Instantiate the IssuesApi
 # **Note:** we can reuse the ApiClient object created previously/above.
 $issuesApi = new IssuesApi($apiClient);
