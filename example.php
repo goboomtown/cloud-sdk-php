@@ -116,24 +116,24 @@ try {
         ->setCity("San Francisco")
         ->setState("CA")
         ->setZipcode("94101")
-        ->setEmail("info@amerchant.com")
+        ->setEmail("info@aMerchant.com")
         ->setPhone("555 555 5555")
-        ->setStreet1("123 Skylane");
+        ->setStreet1("123 Sky Lane");
 
     # Create the User
     $memberCreate->getMembersUsers()
         ->setFirstName("Bob")
         ->setLastName("Mango")
         ->setSmsNumber("999 999 9999")
-        ->setEmail("bmango@amerchant.com");
+        ->setEmail("bmango@aMerchant.com");
 
     # Create the Location
     $memberCreate->getMembersLocations()
         ->setSiteName("A Merchant Mango")
-        ->setCity("an Francisco")
+        ->setCity("San Francisco")
         ->setState("CA")
         ->setZipcode("94101")
-        ->setStreet1("Soma Lofts")
+        ->setStreet1("1 Mango Lofts")
         ->setStreet2("#1337");
 
     # Ok, lets save everything
