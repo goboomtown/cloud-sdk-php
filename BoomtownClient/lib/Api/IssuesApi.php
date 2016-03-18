@@ -214,7 +214,7 @@ class IssuesApi
      */
     public function createIssue($issues = null)
     {
-        list($response, $statusCode, $httpHeader) = $this->createIssueWithHttpInfo ($issues);
+        list($response, $statusCode, $httpHeader) = $this->createIssueWithHttpInfo (['issues'=>$issues]);
         return $response; 
     }
 
