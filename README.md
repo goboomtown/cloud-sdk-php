@@ -139,7 +139,7 @@ try {
 
     $merchantCreate->getMembersLocations()
         ->setSiteName("A Merchant Mango")
-        ->setCity("an Francisco")
+        ->setCity("San Francisco")
         ->setState("CA")
         ->setZipcode("94101")
         ->setStreet1("Soma Lofts")
