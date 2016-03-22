@@ -64,7 +64,7 @@ class IssuesApi
     {
         if ($apiClient == null) {
             $apiClient = new ApiClient();
-            $apiClient->getConfig()->setHost('https://boom-1-api.dev.gizmocreative.com/api/v2');
+            $apiClient->getConfig()->setHost('https://api.goboomtown.com/api/v2');
         }
   
         $this->apiClient = $apiClient;

@@ -1,6 +1,6 @@
 # Swagger\Client\IssuesApi
 
-All URIs are relative to *https://boom-1-api.dev.gizmocreative.com/api/v2*
+All URIs are relative to *https://api.goboomtown.com/api/v2*
 
 Method | HTTP request | Description
 ------------- | ------------- | -------------

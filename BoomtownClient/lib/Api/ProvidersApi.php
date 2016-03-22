@@ -64,7 +64,7 @@ class ProvidersApi
     {
         if ($apiClient == null) {
             $apiClient = new ApiClient();
-            $apiClient->getConfig()->setHost('https://boom-1-api.dev.gizmocreative.com/api/v2');
+            $apiClient->getConfig()->setHost('https://api.goboomtown.com/api/v2');
         }
   
         $this->apiClient = $apiClient;
@@ -105,7 +105,6 @@ class ProvidersApi
         return $response; 
     }
 
-
     /**
      * getProviderWithHttpInfo
      *
@@ -116,8 +115,8 @@ class ProvidersApi
      */
     public function getProviderWithHttpInfo()
     {
-        
-  
+
+
         // parse inputs
         $resourcePath = "/providers/get";
         $httpBody = '';
@@ -129,7 +128,124 @@ class ProvidersApi
             $headerParams['Accept'] = $_header_accept;
         }
         $headerParams['Content-Type'] = ApiClient::selectHeaderContentType(array('application/json'));
+
+
+
+
+        // default format to json
+        $resourcePath = str_replace("{format}", "json", $resourcePath);
+
+
+
+
+        // for model (json/xml)
+        if (isset($_tempBody)) {
+            $httpBody = $_tempBody; // $_tempBody is the method argument, if present
+        } elseif (count($formParams) > 0) {
+            $httpBody = $formParams; // for HTTP post (form)
+        }
+
+        // this endpoint requires API key authentication
+        $apiKey = $this->apiClient->getApiKeyWithPrefix('X-Boomtown-Date');
+        if (strlen($apiKey) !== 0) {
+            $headerParams['X-Boomtown-Date'] = $apiKey;
+        }
+
+
+        // this endpoint requires API key authentication
+        $apiKey = $this->apiClient->getApiKeyWithPrefix('X-Boomtown-Signature');
+        if (strlen($apiKey) !== 0) {
+            $headerParams['X-Boomtown-Signature'] = $apiKey;
+        }
+
+
+        // this endpoint requires API key authentication
+        $apiKey = $this->apiClient->getApiKeyWithPrefix('X-Boomtown-Token');
+        if (strlen($apiKey) !== 0) {
+            $headerParams['X-Boomtown-Token'] = $apiKey;
+        }
+
+
+        // make the API Call
+        try {
+            list($response, $statusCode, $httpHeader) = $this->apiClient->callApi(
+                $resourcePath, 'GET',
+                $queryParams, $httpBody,
+                $headerParams, '\Swagger\Client\Model\ProviderResponse'
+            );
+
+            if (!$response) {
+                return array(null, $statusCode, $httpHeader);
+            }
+
+            return array(\Swagger\Client\ObjectSerializer::deserialize($response, '\Swagger\Client\Model\ProviderResponse', $httpHeader), $statusCode, $httpHeader);
+
+        } catch (ApiException $e) {
+            switch ($e->getCode()) {
+                case 200:
+                    $data = \Swagger\Client\ObjectSerializer::deserialize($e->getResponseBody(), '\Swagger\Client\Model\ProviderResponse', $e->getResponseHeaders());
+                    $e->setResponseObject($data);
+                    break;
+                default:
+                    $data = \Swagger\Client\ObjectSerializer::deserialize($e->getResponseBody(), '\Swagger\Client\Model\Error', $e->getResponseHeaders());
+                    $e->setResponseObject($data);
+                    break;
+            }
+
+            throw $e;
+        }
+    }
+
+    /**
+     * getProviders
+     *
+     * Returns collection of Providers
+     *
+     * @return \Swagger\Client\Model\ProviderResponse
+     * @throws \Swagger\Client\ApiException on non-2xx response
+     */
+    public function getProviders($limit = null, $start = null)
+    {
+        list($response, $statusCode, $httpHeader) = $this->getProvidersWithHttpInfo ($limit, $start);
+        return $response;
+    }
+
+
+    /**
+     * getProviderWithHttpInfo
+     *
+     * Returns your Provider
+     *
+     * @return Array of \Swagger\Client\Model\ProviderResponse, HTTP status code, HTTP response headers (array of strings)
+     * @throws \Swagger\Client\ApiException on non-2xx response
+     */
+    public function getProvidersWithHttpInfo($limit = null, $start = null)
+    {
+        
   
+        // parse inputs
+        $resourcePath = "/providers/list";
+        $httpBody = '';
+        $queryParams = array();
+        $headerParams = array();
+        $formParams = array();
+        $_header_accept = ApiClient::selectHeaderAccept(array('application/json'));
+        if (!is_null($_header_accept)) {
+            $headerParams['Accept'] = $_header_accept;
+        }
+        $headerParams['Content-Type'] = ApiClient::selectHeaderContentType(array('application/json'));
+
+        // query params
+        $limit = (is_int($limit) ? $limit : 10);
+        $start = (is_int($start) ? $start : 0);
+
+        if ($limit !== null) {
+            $queryParams['limit'] = $this->apiClient->getSerializer()->toQueryValue($limit);
+        }// query params
+
+        if ($start !== null) {
+            $queryParams['start'] = $this->apiClient->getSerializer()->toQueryValue($start);
+        }// query params
         
         
         
