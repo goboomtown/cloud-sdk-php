@@ -24,7 +24,6 @@ The Cloud API uses a keyed-HMAC (Hash Message Authentication Code) for authentic
 - HMAC is based on SHA256 hashing.
 - Each request will be valid for 10 seconds from when the request is signed.
 
-
 #### The Canonicalized Resource Parts:
 The "canonicalized resource" is comprised of the **PATH**, **QUERY** and a  **TIMESTAMP** in ISO-8601 form and will be constructed as follows in the order listed.
 
@@ -37,24 +36,19 @@ The "canonicalized resource" is comprised of the **PATH**, **QUERY** and a  **TI
 - Resource (With Query) = "/api/v2/issues?id=SOME_ID#FOO:2016-03-01T23:22:57+00:00"
 - Resource (Without Query) = "/api/v2/issues:2016-03-01T23:22:57+00:00"
 
-
-
 ###### X-Boomtown-Date
-
 - **Type**: API key 
 - **API key parameter name**: X-Boomtown-Date
 - **Location**: HTTP header
 - **Description**: Will contain the current date+time in ISO8601 format
 
 ###### X-Boomtown-Token
-
 - **Type**: API key 
 - **API key parameter name**: X-Boomtown-Token
 - **Location**: HTTP header
 - **Description**:  Will contain your token/public key
 
 ###### X-Boomtown-Signature
-
 - **Type**: API key 
 - **API key parameter name**: X-Boomtown-Signature
 - **Location**: HTTP header
