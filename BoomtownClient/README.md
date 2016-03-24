@@ -4,42 +4,6 @@
 
 PHP 5.4.0 and later
 
-## Installation & Usage
-### Composer
-
-You can install the bindings via [Composer](http://getcomposer.org/). Add this to your `composer.json`:
-
-```
-{
-  "repositories": [
-    {
-      "type": "git",
-      "url": "https://github.com/swagger/swagger-client.git"
-    }
-  ],
-  "require": {
-    "swagger/swagger-client": "*@dev"
-  }
-}
-```
-
-Then install via `composer install`
-
-### Manual Installation
-
-If you do not wish to use Composer, you can download the latest release. Then, to use the bindings, include the `autoload.php` file.
-```php
-    require_once('/path/to/SwaggerClient-php/autoload.php');
-```
-
-## Tests 
-
-To run the unit tests:
-```
-composer install
-./vendor/bin/phpunit lib/Tests
-```
-
 ## Documentation for API Endpoints
 
 All URIs are relative to *https://api.goboomtown.com/api/v2*
@@ -99,6 +63,25 @@ Class | Method | HTTP request | Description
 
 
 ## Documentation For Authorization
+The Cloud API uses a keyed-HMAC (Hash Message Authentication Code) for authentication. To authenticate a request, your public (your token) & private (your secret) key are used to calculate the HMAC from a *"canonicalized resource"* based on specific elements of your request URL. Informally, we call this process "signing the request," and we call the output of the HMAC algorithm the signature.
+
+#### **Note:**
+- HMAC is based on SHA256 hashing.
+- Each request will be valid for 10 seconds from when the request is signed.
+
+
+#### The Canonicalized Resource Parts:
+The "canonicalized resource" is comprised of the **PATH**, **QUERY** and a  **TIMESTAMP** in ISO-8601 form and will be constructed as follows in the order listed.
+
+1. **PATH**: The URL without the hostname and **QUERY** - "/api/v2/issues"
+2. **QUERY**: Anything after the **PATH**  - "?id=SOME_ID#FOO"
+3. **TIMESTAMP** Date & Time in ISO8601 format - "2016-03-01T23:22:57+00:00"
+
+#### Concatenating the **Canonicalized Resource** Parts:
+- Resource Template = **PATH** + **QUERY** + : + **TIMESTAMP**
+- Resource (With Query) = "/api/v2/issues?id=SOME_ID#FOO:2016-03-01T23:22:57+00:00"
+- Resource (Without Query) = "/api/v2/issues:2016-03-01T23:22:57+00:00"
+
 
 
 ## X-Boomtown-Date
@@ -106,19 +89,21 @@ Class | Method | HTTP request | Description
 - **Type**: API key 
 - **API key parameter name**: X-Boomtown-Date
 - **Location**: HTTP header
+- **Description**: Will contain the current date+time in ISO8601 format
 
 ## X-Boomtown-Token
 
 - **Type**: API key 
 - **API key parameter name**: X-Boomtown-Token
 - **Location**: HTTP header
+- **Description**:  Will contain your token/public key
 
 ## X-Boomtown-Signature
 
 - **Type**: API key 
 - **API key parameter name**: X-Boomtown-Signature
 - **Location**: HTTP header
-
+- **Description**: Will contain the signature generated from the **Canonicalized Resource**
 
 ## Author
 
